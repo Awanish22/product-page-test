@@ -17,7 +17,7 @@ Route::get('products/{slug}', function ($slug) {
     return response()->json([
       'data' => null,
       'msg' => 'Item not found.'
-    ], 4040);
+    ], 404);
   }
   return response()->json([
     'data' => [
