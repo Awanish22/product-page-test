@@ -7,15 +7,17 @@
       <div class="row align-items-center justify-content-between">
         <div class="col-12 col-md-5 p-0 p-md-2">
           <div class="d-flex flex-column">
+            <!-- Main image display -->
             <div class="col-12 px-md-2 d-none d-md-block">
-              <div class="" style="cursor: pointer">
-                <b-img :src="mainImage" alt="" style="width: 100%" class="image" @click="showMainImage()"></b-img>
+              <div class="image-container" @click="showMainImage()">
+                <b-img :src="mainImage" alt="" class="image"></b-img>
               </div>
             </div>
 
+            <!-- Image carousel for mobile -->
             <div class="d-block d-md-none col-12 px-0">
               <b-carousel v-model="slide" controls :interval="0">
-                <b-carousel-slide v-for="(image, index) in images" :key="index" :img-src="image"></b-carousel-slide>
+                <b-carousel-slide v-for="(image, index) in images" :key="index" :img-src="image" class="d-block img-fluid"></b-carousel-slide>
               </b-carousel>
             </div>
 
@@ -23,24 +25,21 @@
               <div class="row">
                 <div class="col-3" v-for="(image, index) in images" :key="index">
                   <div class="thumbnail" @click="changeMainImage(image)">
-                    <b-img :src="image" style="width: 100%" alt="" class="image" :class="mainImage === image ? 'active' : ''"></b-img>
+                    <b-img :src="image" class="image" :class="{ 'active': mainImage === image }"></b-img>
                   </div>
                 </div>
               </div>
-            </div>
+                   </div>
           </div>
         </div>
-
         <div class="col-12 col-md-6 text-left my-3">
           <div class="container">
             <div class="mt-2 mb-4">
-              <span class="product-title">{{ title }}</span>
+              <h1 class="product-title">{{ title }}</h1>
             </div>
 
             <div class="my-3">
-              <span class="text-muted">
-                {{ description }}
-              </span>
+              <p class="text-muted">{{ description }}</p>
             </div>
 
             <div class="row">
@@ -48,7 +47,7 @@
                 <div>
                   <span class="product-price">${{ parseFloat(price).toFixed(2) }}</span>
                 </div>
-                <div>
+         <div>
                   <span class="discount">{{ discountAmount }}%</span>
                 </div>
               </div>
@@ -57,7 +56,6 @@
                 <span class="original-price">${{ originalPrice.toFixed(2) }}</span>
               </div>
             </div>
-
             <div class="my-3 row">
               <div class="col-12 col-md-4 text-center px-md-0 mt-3">
                 <div class="bg-quantity d-flex flex-row justify-content-between">
@@ -70,8 +68,8 @@
                   </div>
                 </div>
               </div>
-              <div class="col-12 col-md-8 mt-3">
-                <b-button class="bg-add-cart border-0" :disabled="count === 0" style="width: 80%" @click="submit">
+                  <div class="col-12 col-md-8 mt-3">
+                <b-button class="bg-add-cart border-0" :disabled="count === 0" style="width: 100%" @click="submit">
                   <span class="mx-3">
                     <i class="fas fa-shopping-cart text-white"></i>
                   </span>
@@ -83,7 +81,8 @@
         </div>
       </div>
 
-      <b-modal v-model="showImageModal" variant="transparent" size="md" backdrop shadow hide-footer>
+      <!-- Image modal -->
+                 <b-modal v-model="showImageModal" variant="transparent" size="md" backdrop shadow hide-footer>
         <template #modal-header-close>
           <i class="fas fa-times" style="color: #fff"></i>
         </template>
@@ -92,16 +91,15 @@
             <div class="col-12 px-0 px-md-2">
               <div>
                 <b-carousel v-model="slide" controls :interval="0">
-                  <b-carousel-slide v-for="(image, index) in images" :key="index" :img-src="image"></b-carousel-slide>
+                  <b-carousel-slide v-for="(image, index) in images" :key="index" :img-src="image" class="d-block img-fluid"></b-carousel-slide>
                 </b-carousel>
               </div>
             </div>
-
             <div class="col-12 my-3">
               <div class="row">
                 <div class="col-3" v-for="(image, index) in images" :key="index">
                   <div class="thumbnail">
-                    <b-img :src="image" style="width: 100%" alt="" class="image" :class="index === slide ? 'active' : ''"></b-img>
+                    <b-img :src="image" class="image" :class="{ 'active': index === slide }"></b-img>
                   </div>
                 </div>
               </div>
@@ -137,12 +135,6 @@ export default {
       discountAmount: 0,
       originalPrice: 0,
     };
-  },
-  mounted() {
-    const items = JSON.parse(localStorage.getItem('myCart'));
-    if (items) {
-      this.cartItems = items;
-    }
   },
   computed: {
     cartItemsCount() {
@@ -251,8 +243,24 @@ export default {
   opacity: 0.4;
   border: 3px solid hsl(26, 100%, 55%);
 }
-.image {
+.image-container {
+  cursor: pointer;
   border-radius: 10px;
-  height: 100%;
+  overflow: hidden;
+  transition: transform 0.3s ease;
+}
+.image-container:hover {
+  transform: scale(1.1);
+}
+.image {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 10px;
+}
+@media screen and (max-width: 768px) {
+  .image-container {
+    margin-bottom: 1rem;
+  }
 }
 </style>
